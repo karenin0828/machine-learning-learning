@@ -1,0 +1,69 @@
+#넘파이 배열
+이라는 게 있다. 파이썬에서 데이터를 더 효과적으로 저장하는 방법이다.
+이는 효과적인데 예를 들어서 그냥 배열 [1,2,3]에다가 2를 곱하면 반복이 [123123]이 되지만
+넘파이 배열에다 2를 곱하면 각 벡터(각 원소)에 2가 곱해진다.
+
+#텐서를 만드는 방법
+은 크게 두가지 
+
+torch.from_numpy(a_np)
+
+torch.tensor(a_np)
+
+가 있는데 첫번째꺼는 기존 넘파이 배열과 주소를 공유하므로 하나가 바뀌면 나머지 하나도 바뀐다.
+즉, 이렇게 만든 텐서의 원소를 수정하면 넘파이 배열도 바뀌고 넘파이 배열이 수정되면 여기 텐서의 원소도 바뀐다.
+
+하지만 두번째꺼는 새로운 텐서를 만드므로 기존 넘파이 배열을 수정해도 텐서의 값이 바뀌지 않는다. vice versa
+
+#torch.함수
+
+ones야, "주어진 모양의 텐서를 만들어주는데, 1로 채워줘."
+
+zeros야, "주어진 모양의 텐서를 만들어주는데, 0으로 채워줘."
+
+ones_like야, "입력 텐서와 동일한 모양의 텐서를 만들어주는데, 1로 채워줘."
+
+zeros_like야, "입력 텐서와 동일한 모양의 텐서를 만들어주는데, 0으로 채워줘."
+
+위와 같은 함수들은 torch.ones(shape) 처럼 shape을 설정해 주어야 한다. 행렬의 사이즈..
+예를들어 shape=(2,3)
+
+9월 4일
+
+행렬의 내적과 행렬의 곱은 기본적으로 같은 뜻이다.
+행렬곱 계산하는 방법 세가지
+
+y1 = tensor @ tensor.T
+y2 = tensor.matmul(tensor.T)
+y3 = torch.rand_like(y1)
+torch.matmul(tensor, tensor.T, out=y3)
+
+요소곱 계산하는 방법 세가지
+
+z1 = tensor * tensor
+z2 = tensor.mul(tensor)
+z3 = torch.rand_like(tensor)
+torch.mul(tensor, tensor, out=z3)
+
+단일-요소(single-element) 텐서 텐서의 모든 값을 하나로 집계(aggregate)하여 요소가 하나인 텐서의 경우,
+ item() 을 사용하여 Python 숫자 값으로 변환할 수 있습니다:
+
+agg = tensor.sum()
+agg_item = agg.item()
+print(agg_item, type(agg_item))
+
+이렇게 하면 텐서의 집계 결과를 Python에서 사용하기 쉬운 숫자 값으로 변환하여 처리할 수 있습니다. 
+결과로 얻은 agg_item은 Python의 기본 데이터 유형을 가지므로 수학적 연산이나 조건 확인 등의 
+작업에 쉽게 활용할 수 있습니다.
+
+텐서를 NumPy 배열로 변환하기
+t = torch.ones(5)
+print(f"t: {t}")
+n = t.numpy()
+print(f"n: {n}")
+
+NumPy 배열을 텐서로 변환하기
+n = np.ones(5)
+t = torch.from_numpy(n)
+
+numpy와 tensor의 변경사항은 공유된다.
