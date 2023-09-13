@@ -1,0 +1,24 @@
+Dataset 은 데이터셋의 특징(feature)을 가져오고 하나의 샘플에 정답(label)을 지정하는 일을 한 번에 합니다.
+dataset과 dataloader 구분을 확실하게 해야함. dataset에는 getitem함수가 있어서 인덱스를 통해서 이미지, 라벨을 불러올 수 있다.
+
+데이터 샘플을 처리하는 코드는 지저분(messy)하고 유지보수가 어려울 수 있습니다; 더 나은 가독성(readability)과 모듈성(modularity)을 위해 
+데이터셋 코드를 모델 학습 코드로부터 분리하는 것이 이상적입니다. PyTorch는 torch.utils.data.DataLoader 와 torch.utils.data.Dataset 의 두 가지 데이터
+ 기본 요소를 제공하여 미리 준비해둔(pre-loaded) 데이터셋 뿐만 아니라 가지고 있는 데이터를 사용할 수 있도록 합니다. Dataset 은 샘플과 정답(label)을 저장하고, 
+DataLoader 는 Dataset 을 샘플에 쉽게 접근할 수 있도록 순회 가능한 객체(iterable)로 감쌉니다.
+
+데이터셋을 이용할때나 데이터 로더를 이용하여 불러올때 항상 이미지, 라벨 순서인듯
+
+모든 TorchVision 데이터셋들은 변형 로직을 갖는, 호출 가능한 객체(callable)를 받는 매개변수 두개 
+( 특징(feature)을 변경하기 위한 transform 과 정답(label)을 변경하기 위한 target_transform )를 갖습니다.
+ torchvision.transforms 모듈은 주로 사용하는 몇가지 변형(transform)을 제공합니다.
+
+ ToTensor()
+ ToTensor 는 PIL Image나 NumPy ndarray 를 FloatTensor 로 변환하고, 이미지의 픽셀의 크기(intensity) 값을 [0., 1.] 범위로 비례하여 조정(scale)합니다.
+
+Lambda 변형(Transform)
+ target_transform = Lambda(lambda y: torch.zeros(
+    10, dtype=torch.float).scatter_(dim=0, index=torch.tensor(y), value=1))
+=>정수를 부호화된 텐서로 바꾸는 함수이다. 에를들어 2라고 하면 0 0 1 0 0 0 ...
+ 설명하는 코드. 핫=1, 콜드=0. 이를 원 핫 인코딩이라고 한다.
+lamda는 이런 역할을 해주는 torch.nn밑의 클래스
+
